@@ -27,17 +27,10 @@ def env_list(name, default=""):
     return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
 
 
-ALLOWED_HOSTS = [
-    "self-study-library.vercel.app",
-    ".vercel.app",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
 if os.getenv("RENDER_EXTERNAL_HOSTNAME"):  # Render sets this automatically
     ALLOWED_HOSTS.append(os.environ["RENDER_EXTERNAL_HOSTNAME"])
-CSRF_TRUSTED_ORIGINS = [
-    "https://self-study-library.vercel.app",
-]
+CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -121,7 +114,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
+STATIC_ROOT.mkdir(exist_ok=True)  # avoids a harmless WhiteNoise warning in development  # avoids a harmless WhiteNoise warning in development
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 STORAGES = {
