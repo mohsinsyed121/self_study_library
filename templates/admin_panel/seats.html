@@ -1,0 +1,30 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Seats{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Seats</h1><div class="d-flex gap-2">
+  <a href="{% url 'admin_seat_add' %}" class="btn btn-primary btn-sm">Add seat</a>
+  <a href="{% url 'admin_seat_bulk' %}" class="btn btn-outline-primary btn-sm">Add many</a>
+  <a href="{% url 'admin_allocate' %}" class="btn btn-outline-primary btn-sm">Allocate seat</a></div></div>
+<p class="text-muted small">Active seats: {{ counts.total }} · Available {{ counts.available }} · Reserved {{ counts.reserved }} · Occupied {{ counts.occupied }} · Inactive {{ counts.inactive }}</p>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Seat number or section" aria-label="Search seats">
+  <select name="status" class="form-select w-auto" aria-label="Filter by status">
+    <option value="">All statuses</option>
+    <option value="available" {% if status == 'available' %}selected{% endif %}>Available</option>
+    <option value="reserved" {% if status == 'reserved' %}selected{% endif %}>Reserved</option>
+    <option value="occupied" {% if status == 'occupied' %}selected{% endif %}>Occupied</option>
+    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
+  </select>
+  <button class="btn btn-primary">Filter</button><a href="{% url 'admin_seats' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Seat</th><th>Section</th><th>Status</th><th>Student</th><th></th></tr></thead>
+  <tbody>{% for seat in page_obj %}<tr><td>{{ seat.number }}</td><td>{{ seat.section|default:"-" }}</td><td>{% status_badge seat.status seat.status_label %}</td>
+    <td>{% if seat.current_booking %}{{ seat.current_booking.student.full_name }}{% else %}-{% endif %}</td>
+    <td class="text-nowrap"><a class="btn btn-sm btn-outline-primary" href="{% url 'admin_seat_edit' seat.pk %}">Edit</a>
+      {% if seat.status == 'available' %}<a class="btn btn-sm btn-outline-success" href="{% url 'admin_allocate' %}?seat={{ seat.pk }}">Allocate</a>{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="5">{% include 'partials/empty_state.html' with text="No seats found. Use Add seat or Add many." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

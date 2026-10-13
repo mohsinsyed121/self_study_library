@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Gallery - {{ site.library_name }}{% endblock %}
+{% block main %}
+<div class="page-banner"><div class="container"><h1>Gallery</h1></div></div>
+<div class="container">
+  {% comment %}
+    To use real photos: put image files in static/images/, add {% load static %} at the top of this file,
+    then replace each tile with: <img src="{% static 'images/photo1.jpg' %}" class="img-fluid rounded" alt="Describe the photo">
+  {% endcomment %}
+  <div class="row g-3">
+    {% for label in tiles %}<div class="col-6 col-md-4"><div class="gallery-tile">{{ label }}</div></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

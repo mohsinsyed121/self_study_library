@@ -1,0 +1,25 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}My booking - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>My booking</h1></div>
+<div class="card mb-4"><div class="card-body">
+  {% if booking %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div><div class="h4 mb-1">Seat {{ booking.seat.number }} {% status_badge booking.status booking.get_status_display %}</div>
+        <div class="text-muted small">{{ booking.seat.section|default:"Main hall" }} · booked {{ booking.created_at|date:"d M Y" }}</div></div>
+      <form method="post" action="{% url 'cancel_my_booking' booking.pk %}" data-confirm="Cancel your booking for seat {{ booking.seat.number }}?">
+        {% csrf_token %}<button class="btn btn-outline-danger btn-sm">Cancel booking</button></form>
+    </div>
+  {% else %}
+    {% include 'partials/empty_state.html' with text="You do not have a seat yet." %}
+    <div class="text-center"><a href="{% url 'available_seats' %}" class="btn btn-primary">Find a seat</a></div>
+  {% endif %}
+</div></div>
+<h2 class="h5">Booking history</h2>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Seat</th><th>Status</th><th>Booked on</th><th>Note</th></tr></thead>
+  <tbody>{% for item in history %}<tr><td>{{ item.seat.number }}</td><td>{% status_badge item.status item.get_status_display %}</td><td>{{ item.created_at|date:"d M Y" }}</td><td>{{ item.note }}</td></tr>
+  {% empty %}<tr><td colspan="4">{% include 'partials/empty_state.html' with text="No bookings yet." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

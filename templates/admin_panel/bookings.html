@@ -1,0 +1,25 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Bookings{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Seat bookings</h1><a href="{% url 'admin_allocate' %}" class="btn btn-primary btn-sm">Allocate seat</a></div>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Student ID, name or seat" aria-label="Search bookings">
+  <select name="status" class="form-select w-auto" aria-label="Filter by status"><option value="">All statuses</option>
+    {% for value, label in status_choices %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+  <button class="btn btn-primary">Filter</button><a href="{% url 'admin_bookings' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Student</th><th>Seat</th><th>Status</th><th>Booked</th><th>Actions</th></tr></thead>
+  <tbody>{% for b in page_obj %}<tr>
+    <td><a href="{% url 'admin_student_detail' b.student.pk %}">{{ b.student.full_name }}</a><div class="small text-muted">{{ b.student.student_id }}</div></td>
+    <td>{{ b.seat.number }}</td><td>{% status_badge b.status b.get_status_display %}<div class="small text-muted">{{ b.note }}</div></td><td>{{ b.created_at|date:"d M Y" }}</td>
+    <td class="text-nowrap">{% if b.is_active %}
+      {% if b.status == 'reserved' %}<form method="post" action="{% url 'admin_booking_action' b.pk 'confirm' %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-success">Confirm</button></form>{% endif %}
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_reassign' b.pk %}">Move</a>
+      <form method="post" action="{% url 'admin_booking_action' b.pk 'cancel' %}" class="d-inline" data-confirm="Cancel this booking?">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Cancel</button></form>
+    {% endif %}</td></tr>
+  {% empty %}<tr><td colspan="5">{% include 'partials/empty_state.html' with text="No bookings found." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

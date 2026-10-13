@@ -1,0 +1,18 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Verify ID card{% endblock %}
+{% block content %}
+<div class="page-head"><h1>ID card verification</h1><a href="{% url 'find_student' %}" class="btn btn-outline-secondary btn-sm">Look up another</a></div>
+<div class="card form-card"><div class="card-body">
+  <div class="d-flex gap-3 align-items-center mb-3">
+    {% if student.photo %}<img src="{{ student.photo.url }}" alt="" class="id-photo">{% else %}<i class="bi bi-person-circle display-3 text-secondary"></i>{% endif %}
+    <div><h2 class="h5 mb-0">{{ student.full_name }}</h2><div class="text-muted">{{ student.student_id }}</div></div>
+  </div>
+  <dl class="row mb-0">
+    <dt class="col-5">Account</dt><dd class="col-7">{% status_badge student.account_status %}</dd>
+    <dt class="col-5">Membership</dt><dd class="col-7">{% if membership %}{% status_badge 'active' 'Active' %} until {{ membership.end_date|date:"d M Y" }}{% else %}{% status_badge 'expired' 'Not active' %}{% endif %}</dd>
+    <dt class="col-5">Seat</dt><dd class="col-7">{% if booking %}{{ booking.seat.number }} ({{ booking.get_status_display }}){% else %}None{% endif %}</dd>
+  </dl>
+  <a class="btn btn-primary btn-sm mt-3" href="{% url 'admin_student_detail' student.pk %}">Open student record</a>
+</div></div>
+{% endblock %}

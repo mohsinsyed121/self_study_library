@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load ui %}
+{% block title %}{{ site.library_name }} - Self-study library{% endblock %}
+{% block main %}
+<section class="hero">
+  <div class="container">
+    <h1>{{ site.library_name }}</h1>
+    <p class="lead">{{ site.tagline }}</p>
+    <p>{{ site.about_text|truncatewords:30 }}</p>
+    {% if not user.is_authenticated %}
+      <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">Register</a>
+      <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Log in</a>
+    {% else %}
+      <a href="{% url 'after_login' %}" class="btn btn-light btn-lg">Go to my account</a>
+    {% endif %}
+  </div>
+</section>
+<div class="container py-4">
+  {% include 'partials/messages.html' %}
+  <div class="row g-3 text-center mb-5">
+    <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body"><div class="seat-count">{{ counts.available }}</div><div class="text-muted">Seats available</div></div></div></div>
+    <div class="col-6 col-md-3"><div class="card h-100"><div class="card-body"><div class="seat-count">{{ counts.total }}</div><div class="text-muted">Total seats</div></div></div></div>
+    <div class="col-12 col-md-6"><div class="card h-100"><div class="card-body"><div class="h4 mb-1">{{ site.opening_time|time:"h:i A" }} to {{ site.closing_time|time:"h:i A" }}</div><div class="text-muted">Open every day</div></div></div></div>
+  </div>
+
+  <h2 class="h4 mb-3">Membership plans</h2>
+  <div class="row g-3 mb-5">
+    {% for plan in plans %}{% include 'website/_plan_card.html' %}
+    {% empty %}<div class="col-12">{% include 'partials/empty_state.html' with text="Plans will be announced soon." %}</div>{% endfor %}
+  </div>
+  <p><a href="{% url 'public_plans' %}">See all plans and fees</a></p>
+
+  <div class="row g-4 mt-2">
+    <div class="col-md-6"><h2 class="h4">Facilities</h2>
+      <p>Silent study desks, fans and lighting at every seat, drinking water, charging points and CCTV security.
+        <a href="{% url 'facilities' %}">See all facilities</a></p></div>
+    <div class="col-md-6"><h2 class="h4">Visit or call us</h2>
+      <p class="mb-1">{{ site.address|linebreaksbr }}</p><p class="mb-1"><i class="bi bi-telephone"></i> {{ site.phone }}</p>
+      <p><i class="bi bi-envelope"></i> {{ site.email }}</p></div>
+  </div>
+</div>
+{% endblock %}

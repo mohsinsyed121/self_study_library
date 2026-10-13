@@ -1,0 +1,9 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}Website settings{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Website settings</h1></div>
+<div class="card form-card wide"><div class="card-body">
+  <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}{% include 'partials/form_fields.html' %}
+    <button class="btn btn-primary" type="submit">Save settings</button></form>
+</div></div>
+{% endblock %}

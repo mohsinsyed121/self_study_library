@@ -1,0 +1,9 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}Verify ID card{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Verify a student ID</h1></div>
+<div class="card form-card"><div class="card-body">
+  <p class="small text-muted">Scan the student's QR code with a phone camera (it opens the verification page), or type the student ID here.</p>
+  <form method="post" novalidate>{% csrf_token %}{% include 'partials/form_fields.html' %}<button class="btn btn-primary">Find student</button></form>
+</div></div>
+{% endblock %}

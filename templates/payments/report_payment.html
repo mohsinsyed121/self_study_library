@@ -1,0 +1,13 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Report payment - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Report a payment</h1></div>
+<div class="card form-card"><div class="card-body">
+  <p><strong>{{ fee.description }}</strong><br>You can still pay up to {{ fee.payable_now|money }}.</p>
+  <div class="alert alert-info small">This does not take money online. Pay at the library desk (or by UPI to the library), then enter the details here. The library will verify it.</div>
+  <form method="post" novalidate>{% csrf_token %}{% include 'partials/form_fields.html' %}
+    <button class="btn btn-primary" type="submit">Submit for verification</button>
+    <a href="{% url 'fee_summary' %}" class="btn btn-outline-secondary">Cancel</a></form>
+</div></div>
+{% endblock %}

@@ -1,0 +1,20 @@
+<footer class="site-footer py-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-5">
+        <h6>{{ site.library_name }}</h6>
+        <p class="small mb-0">{{ site.tagline }}</p>
+      </div>
+      <div class="col-md-4">
+        <h6>Contact</h6>
+        <p class="small mb-0">{{ site.address|linebreaksbr }}<br>{{ site.phone }}<br><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+      </div>
+      <div class="col-md-3">
+        <h6>Open daily</h6>
+        <p class="small mb-0">{{ site.opening_time|time:"h:i A" }} to {{ site.closing_time|time:"h:i A" }}</p>
+      </div>
+    </div>
+    <hr class="border-secondary">
+    <p class="small mb-0">&copy; {% now "Y" %} {{ site.library_name }}</p>
+  </div>
+</footer>

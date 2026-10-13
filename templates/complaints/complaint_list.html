@@ -1,0 +1,12 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Complaints - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>My complaints</h1><a href="{% url 'complaint_create' %}" class="btn btn-primary btn-sm">New complaint</a></div>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Subject</th><th>Date</th><th>Status</th></tr></thead>
+  <tbody>{% for c in page_obj %}<tr><td><a href="{% url 'complaint_detail' c.pk %}">{{ c.subject }}</a></td><td>{{ c.created_at|date:"d M Y" }}</td><td>{% status_badge c.status c.get_status_display %}</td></tr>
+  {% empty %}<tr><td colspan="3">{% include 'partials/empty_state.html' with text="You have not submitted any complaints." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

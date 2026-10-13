@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}About - {{ site.library_name }}{% endblock %}
+{% block main %}
+<div class="page-banner"><div class="container"><h1>About us</h1></div></div>
+<div class="container"><div class="row"><div class="col-lg-8">
+  <p class="fs-5">{{ site.about_text|linebreaksbr }}</p>
+  <p>This is a self-study space, not a book-lending library. You bring your own books and notes; we give you a quiet seat, good light and a calm room on a single floor.</p>
+  <a href="{% url 'register' %}" class="btn btn-primary">Join the library</a>
+</div></div></div>
+{% endblock %}

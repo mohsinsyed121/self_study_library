@@ -1,0 +1,32 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Reports</h1></div>
+<form method="get" class="filter-bar d-flex flex-wrap align-items-start gap-2 mb-3">
+  <div>{{ form.start.label_tag }} {% load ui %}{{ form.start|bs }}{% for e in form.start.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+  <div>{{ form.end.label_tag }} {{ form.end|bs }}{% for e in form.end.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+  <div class="pt-4"><button class="btn btn-primary">Show report</button></div>
+</form>
+{% if report %}
+<div class="row g-3 mb-3">
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted small">Confirmed collection (in range)</div><div class="report-total text-success">{{ report.confirmed_collection|money }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted small">Payments awaiting verification</div><div class="report-total">{{ report.pending_payments|money }}</div></div></div></div>
+  <div class="col-md-4"><div class="card"><div class="card-body"><div class="text-muted small">Outstanding dues (all time)</div><div class="report-total text-danger">{{ report.outstanding_dues|money }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Fees generated</div><div class="report-total">{{ report.fees_generated|money }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">New students</div><div class="report-total">{{ report.new_students }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Memberships started</div><div class="report-total">{{ report.memberships_activated }}</div></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Complaints received / resolved</div><div class="report-total">{{ report.complaints_received }} / {{ report.complaints_resolved }}</div></div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-5"><div class="card"><div class="card-header">Collection by method</div><table class="table mb-0">
+    <thead><tr><th>Method</th><th>Payments</th><th>Total</th></tr></thead>
+    <tbody>{% for m in report.methods %}<tr><td>{{ m.name }}</td><td>{{ m.count }}</td><td>{{ m.total|money }}</td></tr>
+    {% empty %}<tr><td colspan="3">{% include 'partials/empty_state.html' with text="No confirmed payments in this range." %}</td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="col-lg-7"><div class="card"><div class="card-header">Students with dues (top 20)</div><table class="table mb-0">
+    <thead><tr><th>Student</th><th>Due</th></tr></thead>
+    <tbody>{% for row in report.owing %}<tr><td><a href="{% url 'admin_student_detail' row.student.pk %}">{{ row.student.full_name }}</a> <span class="text-muted small">{{ row.student.student_id }}</span></td><td>{{ row.due|money }}</td></tr>
+    {% empty %}<tr><td colspan="2">{% include 'partials/empty_state.html' with text="No dues. Everyone is paid up." %}</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endif %}
+{% endblock %}

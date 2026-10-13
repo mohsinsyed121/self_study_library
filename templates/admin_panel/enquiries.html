@@ -1,0 +1,13 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Contact enquiries{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Contact enquiries</h1></div>
+<div class="card"><ul class="list-group list-group-flush">
+  {% for e in page_obj %}<li class="list-group-item d-flex justify-content-between gap-3">
+    <div><strong>{{ e.name }}</strong> <span class="text-muted small">{{ e.email }} {{ e.phone }} · {{ e.created_at|date:"d M Y" }}</span><div>{{ e.message|linebreaksbr }}</div></div>
+    {% if e.is_handled %}{% status_badge 'resolved' 'Handled' %}{% else %}<form method="post" action="{% url 'admin_enquiry_handled' e.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-success text-nowrap">Mark handled</button></form>{% endif %}
+  </li>{% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No enquiries yet." %}</li>{% endfor %}
+</ul></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

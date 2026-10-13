@@ -1,0 +1,19 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Complaints{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Complaints</h1></div>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Subject or student" aria-label="Search complaints">
+  <select name="status" class="form-select w-auto" aria-label="Filter by status"><option value="">All statuses</option>
+    {% for value, label in status_choices %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+  <button class="btn btn-primary">Filter</button><a href="{% url 'admin_complaints' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Subject</th><th>Student</th><th>Date</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for c in page_obj %}<tr><td>{{ c.subject }}</td><td>{{ c.student.full_name }}</td><td>{{ c.created_at|date:"d M Y" }}</td><td>{% status_badge c.status c.get_status_display %}</td>
+    <td><a class="btn btn-sm btn-outline-primary" href="{% url 'admin_complaint_detail' c.pk %}">Open</a></td></tr>
+  {% empty %}<tr><td colspan="5">{% include 'partials/empty_state.html' with text="No complaints found." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

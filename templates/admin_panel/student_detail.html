@@ -1,0 +1,46 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}{{ student.full_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ student.full_name }} <small class="text-muted fs-6">{{ student.student_id }}</small></h1>
+  <a href="{% url 'admin_students' %}" class="btn btn-outline-secondary btn-sm">Back to students</a></div>
+<div class="row g-3 mb-3">
+  <div class="col-lg-5"><div class="card h-100"><div class="card-header">Profile {% status_badge student.account_status %}</div><div class="card-body">
+    <dl class="row mb-3">
+      <dt class="col-4">Username</dt><dd class="col-8">{{ student.user.username }}</dd>
+      <dt class="col-4">Email</dt><dd class="col-8">{{ student.user.email }}</dd>
+      <dt class="col-4">Phone</dt><dd class="col-8">{{ student.phone }}</dd>
+      <dt class="col-4">Address</dt><dd class="col-8">{{ student.address|default:"-" }}</dd>
+      <dt class="col-4">Guardian</dt><dd class="col-8">{{ student.guardian_name|default:"-" }} {{ student.guardian_phone }}</dd>
+      <dt class="col-4">Registered</dt><dd class="col-8">{{ student.created_at|date:"d M Y" }}</dd>
+    </dl>
+    <div class="d-flex flex-wrap gap-2">
+      {% if student.approval_status != 'approved' %}<form method="post" action="{% url 'admin_student_action' student.pk 'approve' %}">{% csrf_token %}<button class="btn btn-sm btn-success">Approve</button></form>{% endif %}
+      {% if student.approval_status == 'pending' %}<form method="post" action="{% url 'admin_student_action' student.pk 'reject' %}" data-confirm="Reject this registration?">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Reject</button></form>{% endif %}
+      {% if student.user.is_active %}<form method="post" action="{% url 'admin_student_action' student.pk 'deactivate' %}" data-confirm="Deactivate this account? They will not be able to log in and their seat will be released.">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Deactivate</button></form>
+      {% else %}<form method="post" action="{% url 'admin_student_action' student.pk 'reactivate' %}">{% csrf_token %}<button class="btn btn-sm btn-outline-success">Reactivate</button></form>{% endif %}
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_membership_add' %}?student={{ student.pk }}">Activate membership</a>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'admin_allocate' %}">Allocate seat</a>
+    </div>
+  </div></div></div>
+  <div class="col-lg-7"><div class="card h-100"><div class="card-header">Fees</div><div class="card-body">
+    <div class="row text-center mb-3">
+      <div class="col"><div class="text-muted small">Total fees</div><div class="report-total">{{ summary.total_fee|money }}</div></div>
+      <div class="col"><div class="text-muted small">Confirmed paid</div><div class="report-total">{{ summary.total_paid|money }}</div></div>
+      <div class="col"><div class="text-muted small">Remaining due</div><div class="report-total">{{ summary.remaining_due|money }}</div></div>
+    </div>
+    <table class="table table-sm mb-0"><tbody>
+      {% for fee in fees %}<tr><td>{{ fee.description|truncatechars:45 }}</td><td>{{ fee.amount|money }}</td><td>{% status_badge fee.payment_status %}</td>
+        <td><a href="{% url 'admin_payment_add' %}?fee={{ fee.pk }}">Record payment</a></td></tr>
+      {% empty %}<tr><td>No fees yet.</td></tr>{% endfor %}</tbody></table>
+  </div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-6"><div class="card"><div class="card-header">Memberships</div><table class="table table-sm mb-0"><tbody>
+    {% for m in memberships %}<tr><td>{{ m.plan.name }}</td><td>{{ m.start_date|date:"d M Y"|default:"-" }} to {{ m.end_date|date:"d M Y"|default:"-" }}</td><td>{% status_badge m.status m.get_status_display %}</td></tr>
+    {% empty %}<tr><td>No memberships.</td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-header">Seat bookings</div><table class="table table-sm mb-0"><tbody>
+    {% for b in bookings %}<tr><td>Seat {{ b.seat.number }}</td><td>{{ b.created_at|date:"d M Y" }}</td><td>{% status_badge b.status b.get_status_display %}</td></tr>
+    {% empty %}<tr><td>No bookings.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}

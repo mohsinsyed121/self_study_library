@@ -1,0 +1,36 @@
+/* Student panel: sidebar layout, seat map, ID card. */
+.app-shell { display: flex; min-height: calc(100vh - 56px); }
+.app-sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--line); }
+.app-sidebar .nav-link { color: #3d4f60; border-radius: .4rem; padding: .55rem .8rem; display: flex; align-items: center; gap: .6rem; }
+.app-sidebar .nav-link:hover { background: #eef3f7; }
+.app-sidebar .nav-link.active { background: var(--brand); color: #fff; }
+.app-content { flex: 1; min-width: 0; padding: 1.5rem; }
+@media (max-width: 991.98px) { .app-sidebar { width: 260px; } .app-content { padding: 1rem; } }
+
+/* stat cards */
+.stat-card .stat-label { color: #6b7a89; font-size: .85rem; }
+.stat-card .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+
+/* seat map */
+.seat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: .6rem; }
+.seat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: .6rem .2rem; border-radius: .5rem; border: 2px solid transparent; text-decoration: none; font-weight: 700; color: #fff; min-height: 66px; }
+.seat small { font-weight: 500; font-size: .7rem; }
+.seat-available { background: var(--leaf); }
+.seat-available:hover { border-color: var(--ink); color: #fff; }
+.seat-reserved { background: var(--amber); color: #3a2a05; }
+.seat-occupied { background: var(--brick); }
+.seat-inactive { background: #9aa7b4; }
+.legend-dot { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: .35rem; vertical-align: -2px; }
+
+/* ID card */
+.id-card { width: 340px; max-width: 100%; margin: 0 auto; background: #fff; border: 2px solid var(--ink); border-radius: 1rem; overflow: hidden; }
+.id-card-head { background: var(--ink); color: #fff; padding: .8rem 1rem; display: flex; align-items: center; gap: .6rem; }
+.id-card-head img { height: 38px; width: 38px; border-radius: 6px; object-fit: cover; }
+.id-card-body { padding: 1rem; text-align: center; }
+.id-photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 3px solid var(--line); }
+.id-qr { width: 170px; height: 170px; }
+@media print {
+  .site-nav, .app-sidebar, .no-print, .site-footer, .alert { display: none !important; }
+  .app-content { padding: 0; }
+  body { background: #fff; }
+}

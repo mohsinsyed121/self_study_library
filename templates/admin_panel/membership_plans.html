@@ -1,0 +1,13 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Membership plans{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Membership plans</h1><a href="{% url 'admin_plan_add' %}" class="btn btn-primary btn-sm">Add plan</a></div>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Name</th><th>Duration</th><th>Price</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for plan in plans %}<tr><td>{{ plan.name }}<div class="small text-muted">{{ plan.description|truncatechars:60 }}</div></td><td>{{ plan.duration_days }} days</td><td>{{ plan.price|money }}</td>
+    <td>{% if plan.is_active %}{% status_badge 'active' 'Active' %}{% else %}{% status_badge 'inactive' 'Inactive' %}{% endif %}</td>
+    <td><a class="btn btn-sm btn-outline-primary" href="{% url 'admin_plan_edit' plan.pk %}">Edit</a></td></tr>
+  {% empty %}<tr><td colspan="5">{% include 'partials/empty_state.html' with text="No plans yet. Add your first plan." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Plans &amp; fees - {{ site.library_name }}{% endblock %}
+{% block main %}
+<div class="page-banner"><div class="container"><h1>Membership plans and fees</h1></div></div>
+<div class="container">
+  <div class="row g-3">
+    {% for plan in plans %}{% include 'website/_plan_card.html' %}
+    {% empty %}<div class="col-12">{% include 'partials/empty_state.html' with text="No plans are available right now." %}</div>{% endfor %}
+  </div>
+  <p class="mt-4 text-muted">Fees are paid at the library desk. After the library confirms your payment, it appears in your account.</p>
+  {% if not user.is_authenticated %}<a href="{% url 'register' %}" class="btn btn-primary">Register to join</a>{% endif %}
+</div>
+{% endblock %}
