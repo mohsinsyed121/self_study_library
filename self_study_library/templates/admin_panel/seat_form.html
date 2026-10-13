@@ -1,0 +1,10 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ title }}</h1></div>
+<div class="card form-card"><div class="card-body">
+  <form method="post" novalidate>{% csrf_token %}{% include 'partials/form_fields.html' %}
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancel</a></form>
+</div></div>
+{% endblock %}

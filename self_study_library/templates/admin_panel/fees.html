@@ -1,0 +1,23 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Fees{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Fee records</h1><a href="{% url 'admin_fee_add' %}" class="btn btn-primary btn-sm">Add fee</a></div>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Student or description" aria-label="Search fees">
+  <select name="status" class="form-select w-auto" aria-label="Filter"><option value="">All</option>
+    <option value="due" {% if status == 'due' %}selected{% endif %}>Has dues</option>
+    <option value="unpaid" {% if status == 'unpaid' %}selected{% endif %}>Unpaid</option>
+    <option value="partial" {% if status == 'partial' %}selected{% endif %}>Partly paid</option>
+    <option value="paid" {% if status == 'paid' %}selected{% endif %}>Fully paid</option></select>
+  <button class="btn btn-primary">Filter</button><a href="{% url 'admin_fees' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Student</th><th>Fee</th><th>Amount</th><th>Confirmed paid</th><th>Due</th><th></th></tr></thead>
+  <tbody>{% for fee in page_obj %}<tr><td><a href="{% url 'admin_student_detail' fee.student.pk %}">{{ fee.student.full_name }}</a></td><td>{{ fee.description|truncatechars:45 }}</td>
+    <td>{{ fee.amount|money }}</td><td>{{ fee.total_paid|money }}</td><td>{{ fee.remaining_due|money }}</td>
+    <td>{% if fee.remaining_due > 0 %}<a class="btn btn-sm btn-outline-primary" href="{% url 'admin_payment_add' %}?fee={{ fee.pk }}">Record payment</a>{% else %}{% status_badge 'paid' 'Paid' %}{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="6">{% include 'partials/empty_state.html' with text="No fee records found." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

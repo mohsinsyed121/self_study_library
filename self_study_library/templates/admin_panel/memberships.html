@@ -1,0 +1,22 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Memberships{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Memberships</h1><a href="{% url 'admin_membership_add' %}" class="btn btn-primary btn-sm">Activate / renew</a></div>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Student or plan" aria-label="Search memberships">
+  <select name="status" class="form-select w-auto" aria-label="Filter by status"><option value="">All statuses</option>
+    {% for value, label in status_choices %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+  <button class="btn btn-primary">Filter</button><a href="{% url 'admin_memberships' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Student</th><th>Plan</th><th>Start</th><th>End</th><th>Price</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for m in page_obj %}<tr><td><a href="{% url 'admin_student_detail' m.student.pk %}">{{ m.student.full_name }}</a></td><td>{{ m.plan.name }}</td>
+    <td>{{ m.start_date|date:"d M Y"|default:"-" }}</td><td>{{ m.end_date|date:"d M Y"|default:"-" }}</td><td>{{ m.price|money }}</td><td>{% status_badge m.status m.get_status_display %}</td>
+    <td class="text-nowrap">{% if m.status == 'pending' %}
+      <form method="post" action="{% url 'admin_membership_action' m.pk 'activate' %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-success">Activate</button></form>
+      <form method="post" action="{% url 'admin_membership_action' m.pk 'cancel' %}" class="d-inline" data-confirm="Cancel this request?">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Cancel</button></form>{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="7">{% include 'partials/empty_state.html' with text="No memberships found." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

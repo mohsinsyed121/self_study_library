@@ -1,0 +1,18 @@
+{% extends 'layouts/student_base.html' %}
+{% block title %}Book seat {{ seat.number }} - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Book seat {{ seat.number }}</h1></div>
+<div class="card form-card"><div class="card-body">
+  <h2 class="h6">Booking rules</h2>
+  <ul class="small">
+    <li>You need an approved account and an active membership (yours ends {{ membership.end_date|date:"d M Y"|default:"- none" }}).</li>
+    <li>You can hold one seat at a time.</li>
+    <li>The library confirms your reservation. You can cancel it any time from "My booking".</li>
+    <li>Your seat is released when your membership expires.</li>
+  </ul>
+  <form method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">Confirm booking for seat {{ seat.number }}</button>
+    <a href="{% url 'seat_detail' seat.pk %}" class="btn btn-outline-secondary">Cancel</a>
+  </form>
+</div></div>
+{% endblock %}

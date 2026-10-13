@@ -1,0 +1,12 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}{{ complaint.subject }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ complaint.subject }}</h1><a href="{% url 'complaint_list' %}" class="btn btn-outline-secondary btn-sm">Back</a></div>
+<div class="card form-card wide"><div class="card-body">
+  <p class="text-muted small">Submitted {{ complaint.created_at|date:"d M Y, h:i A" }} · {% status_badge complaint.status complaint.get_status_display %}</p>
+  <p>{{ complaint.description|linebreaksbr }}</p>
+  <hr><h2 class="h6">Library response</h2>
+  {% if complaint.admin_response %}<p class="mb-0">{{ complaint.admin_response|linebreaksbr }}</p>{% else %}<p class="text-muted mb-0">No response yet.</p>{% endif %}
+</div></div>
+{% endblock %}

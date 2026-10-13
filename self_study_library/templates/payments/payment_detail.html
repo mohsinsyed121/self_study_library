@@ -1,0 +1,19 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Payment detail - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Payment detail</h1><a href="{% url 'payment_history' %}" class="btn btn-outline-secondary btn-sm">Back</a></div>
+<div class="card form-card"><div class="card-body">
+  <dl class="row mb-3">
+    <dt class="col-5">For</dt><dd class="col-7">{{ payment.fee.description }}</dd>
+    <dt class="col-5">Amount</dt><dd class="col-7">{{ payment.amount|money }}</dd>
+    <dt class="col-5">Method</dt><dd class="col-7">{{ payment.get_method_display }}</dd>
+    <dt class="col-5">Reference</dt><dd class="col-7">{{ payment.reference|default:"-" }}</dd>
+    <dt class="col-5">Payment date</dt><dd class="col-7">{{ payment.paid_on|date:"d M Y" }}</dd>
+    <dt class="col-5">Status</dt><dd class="col-7">{% status_badge payment.status payment.get_status_display %}</dd>
+    {% if payment.receipt_number %}<dt class="col-5">Receipt no.</dt><dd class="col-7">{{ payment.receipt_number }}</dd>{% endif %}
+  </dl>
+  {% if payment.status == 'confirmed' %}<a href="{% url 'payment_receipt' payment.pk %}" class="btn btn-primary">View receipt</a>
+  {% elif payment.status == 'pending' %}<p class="text-muted small mb-0">Waiting for the library to verify this payment.</p>{% endif %}
+</div></div>
+{% endblock %}

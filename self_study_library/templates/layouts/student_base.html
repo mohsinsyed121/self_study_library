@@ -1,0 +1,4 @@
+{% extends 'layouts/app_base.html' %}
+{% load static %}
+{% block extra_css %}<link href="{% static 'css/student.css' %}" rel="stylesheet">{% endblock %}
+{% block sidebar %}{% include 'partials/student_sidebar.html' %}{% endblock %}

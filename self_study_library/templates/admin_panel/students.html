@@ -1,0 +1,32 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Students</h1></div>
+<form method="get" class="filter-bar d-flex flex-wrap gap-2 mb-3">
+  <input type="search" name="q" value="{{ q }}" class="form-control w-auto" placeholder="Name, ID, phone, email" aria-label="Search students">
+  <select name="status" class="form-select w-auto" aria-label="Filter by status">
+    <option value="">All statuses</option>
+    <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pending approval</option>
+    <option value="approved" {% if status == 'approved' %}selected{% endif %}>Approved</option>
+    <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejected</option>
+    <option value="deactivated" {% if status == 'deactivated' %}selected{% endif %}>Deactivated</option>
+  </select>
+  <button class="btn btn-primary">Search</button>
+  <a href="{% url 'admin_students' %}" class="btn btn-outline-secondary">Clear</a>
+</form>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Registered</th><th>Status</th><th>Actions</th></tr></thead>
+  <tbody>{% for s in page_obj %}<tr>
+    <td>{{ s.student_id }}</td><td><a href="{% url 'admin_student_detail' s.pk %}">{{ s.full_name }}</a><div class="small text-muted">{{ s.user.email }}</div></td>
+    <td>{{ s.phone }}</td><td>{{ s.created_at|date:"d M Y" }}</td><td>{% status_badge s.account_status %}</td>
+    <td class="text-nowrap">
+      {% if s.approval_status == 'pending' %}
+        <form method="post" action="{% url 'admin_student_action' s.pk 'approve' %}" class="d-inline">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-sm btn-success">Approve</button></form>
+        <form method="post" action="{% url 'admin_student_action' s.pk 'reject' %}" class="d-inline" data-confirm="Reject this registration?">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-sm btn-outline-danger">Reject</button></form>
+      {% else %}<a class="btn btn-sm btn-outline-primary" href="{% url 'admin_student_detail' s.pk %}">Open</a>{% endif %}
+    </td></tr>
+  {% empty %}<tr><td colspan="6">{% include 'partials/empty_state.html' with text="No students match your search." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

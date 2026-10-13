@@ -1,0 +1,20 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Receipt {{ payment.receipt_number }}{% endblock %}
+{% block content %}
+<div class="page-head no-print"><h1>Receipt</h1><button type="button" class="btn btn-primary btn-sm" data-print><i class="bi bi-printer"></i> Print</button></div>
+<div class="card form-card"><div class="card-body p-4">
+  <div class="text-center mb-3"><h2 class="h4 mb-0">{{ site.library_name }}</h2><div class="small text-muted">{{ site.address|linebreaksbr }}</div></div>
+  <hr>
+  <dl class="row mb-0">
+    <dt class="col-5">Receipt no.</dt><dd class="col-7">{{ payment.receipt_number }}</dd>
+    <dt class="col-5">Student</dt><dd class="col-7">{{ payment.fee.student.full_name }} ({{ payment.fee.student.student_id }})</dd>
+    <dt class="col-5">For</dt><dd class="col-7">{{ payment.fee.description }}</dd>
+    <dt class="col-5">Payment date</dt><dd class="col-7">{{ payment.paid_on|date:"d M Y" }}</dd>
+    <dt class="col-5">Method</dt><dd class="col-7">{{ payment.get_method_display }} {{ payment.reference }}</dd>
+    <dt class="col-5">Amount paid</dt><dd class="col-7 fw-bold">{{ payment.amount|money }}</dd>
+    <dt class="col-5">Verified on</dt><dd class="col-7">{{ payment.verified_at|date:"d M Y" }}</dd>
+  </dl>
+  <hr><p class="small text-muted text-center mb-0">This is a computer-generated receipt.</p>
+</div></div>
+{% endblock %}

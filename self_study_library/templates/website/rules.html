@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Rules &amp; timings - {{ site.library_name }}{% endblock %}
+{% block main %}
+<div class="page-banner"><div class="container"><h1>Library rules and timings</h1></div></div>
+<div class="container"><div class="row g-4">
+  <div class="col-md-4"><div class="card"><div class="card-body"><h2 class="h5">Timings</h2>
+    <p class="mb-0">{{ site.opening_time|time:"h:i A" }} to {{ site.closing_time|time:"h:i A" }}, every day.</p></div></div></div>
+  <div class="col-md-8"><div class="card"><div class="card-body"><h2 class="h5">Rules</h2>
+    <ol class="mb-0">{% for rule in site.rules_list %}<li>{{ rule }}</li>{% empty %}<li>No rules have been added yet.</li>{% endfor %}</ol></div></div></div>
+</div></div>
+{% endblock %}

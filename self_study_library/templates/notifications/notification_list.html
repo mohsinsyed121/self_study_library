@@ -1,0 +1,17 @@
+{% extends 'layouts/student_base.html' %}
+{% block title %}Notifications - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Notifications</h1>
+  {% if unread_count %}<form method="post" action="{% url 'notification_mark_all_read' %}">{% csrf_token %}<button class="btn btn-outline-primary btn-sm">Mark all as read</button></form>{% endif %}
+</div>
+<div class="card"><ul class="list-group list-group-flush">
+  {% for note in page_obj %}
+    <li class="list-group-item d-flex justify-content-between align-items-start gap-3 {% if not note.is_read %}bg-light{% endif %}">
+      <div><div class="{% if not note.is_read %}fw-semibold{% endif %}">{{ note.title }}</div>
+        <div>{{ note.message }}</div><div class="small text-muted">{{ note.created_at|date:"d M Y, h:i A" }}</div></div>
+      {% if not note.is_read %}<form method="post" action="{% url 'notification_mark_read' note.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-secondary text-nowrap">Mark as read</button></form>{% endif %}
+    </li>
+  {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="You have no notifications." %}</li>{% endfor %}
+</ul></div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

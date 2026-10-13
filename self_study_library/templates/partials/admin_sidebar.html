@@ -1,0 +1,19 @@
+{% with current=request.resolver_match.url_name %}
+<a class="nav-link {% if current == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+<div class="sidebar-heading">PEOPLE</div>
+<a class="nav-link {% if current == 'admin_students' or current == 'admin_student_detail' %}active{% endif %}" href="{% url 'admin_students' %}"><i class="bi bi-people"></i> Students</a>
+<a class="nav-link {% if current == 'find_student' or current == 'verify_id_card' %}active{% endif %}" href="{% url 'find_student' %}"><i class="bi bi-qr-code-scan"></i> Verify ID card</a>
+<div class="sidebar-heading">SEATS</div>
+<a class="nav-link {% if current == 'admin_seats' or current == 'admin_seat_add' or current == 'admin_seat_edit' or current == 'admin_seat_bulk' %}active{% endif %}" href="{% url 'admin_seats' %}"><i class="bi bi-grid-3x3-gap"></i> Seats</a>
+<a class="nav-link {% if current == 'admin_bookings' or current == 'admin_allocate' or current == 'admin_reassign' %}active{% endif %}" href="{% url 'admin_bookings' %}"><i class="bi bi-bookmark-check"></i> Bookings</a>
+<div class="sidebar-heading">MEMBERSHIPS &amp; MONEY</div>
+<a class="nav-link {% if current == 'admin_plans' or current == 'admin_plan_add' or current == 'admin_plan_edit' %}active{% endif %}" href="{% url 'admin_plans' %}"><i class="bi bi-tags"></i> Plans</a>
+<a class="nav-link {% if current == 'admin_memberships' or current == 'admin_membership_add' %}active{% endif %}" href="{% url 'admin_memberships' %}"><i class="bi bi-card-checklist"></i> Memberships</a>
+<a class="nav-link {% if current == 'admin_fees' or current == 'admin_fee_add' %}active{% endif %}" href="{% url 'admin_fees' %}"><i class="bi bi-receipt"></i> Fees</a>
+<a class="nav-link {% if current == 'admin_payments' or current == 'admin_payment_add' %}active{% endif %}" href="{% url 'admin_payments' %}"><i class="bi bi-cash-coin"></i> Payments</a>
+<div class="sidebar-heading">OTHER</div>
+<a class="nav-link {% if current == 'admin_complaints' or current == 'admin_complaint_detail' %}active{% endif %}" href="{% url 'admin_complaints' %}"><i class="bi bi-chat-left-text"></i> Complaints</a>
+<a class="nav-link {% if current == 'admin_enquiries' %}active{% endif %}" href="{% url 'admin_enquiries' %}"><i class="bi bi-envelope"></i> Enquiries</a>
+<a class="nav-link {% if current == 'admin_reports' %}active{% endif %}" href="{% url 'admin_reports' %}"><i class="bi bi-bar-chart"></i> Reports</a>
+<a class="nav-link {% if current == 'admin_settings' %}active{% endif %}" href="{% url 'admin_settings' %}"><i class="bi bi-gear"></i> Website settings</a>
+{% endwith %}

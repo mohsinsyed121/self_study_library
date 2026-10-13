@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Register - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="card auth-card" style="max-width:640px">
+  <div class="card-body p-4">
+    <h1 class="h4 mb-1">Create your student account</h1>
+    <p class="text-muted small">After you register, the library will approve your account.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include 'partials/form_fields.html' %}
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+    <p class="small text-center mt-3 mb-0">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  </div>
+</div>
+{% endblock %}

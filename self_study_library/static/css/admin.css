@@ -1,0 +1,9 @@
+/* Admin panel adds a darker sidebar on top of student.css layout rules. */
+.admin-panel .app-sidebar { background: var(--ink); border-right: 0; }
+.admin-panel .app-sidebar .nav-link { color: #c3d1de; }
+.admin-panel .app-sidebar .nav-link:hover { background: rgba(255, 255, 255, .08); }
+.admin-panel .app-sidebar .nav-link.active { background: var(--brand); color: #fff; }
+.admin-panel .sidebar-heading { color: #7f93a6; font-size: .75rem; padding: .9rem .8rem .3rem; }
+.admin-panel .site-nav { background: #0f1b2d; }
+.filter-bar .form-control, .filter-bar .form-select { min-width: 140px; }
+.report-total { font-size: 1.4rem; font-weight: 700; }

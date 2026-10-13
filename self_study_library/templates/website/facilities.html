@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Facilities - {{ site.library_name }}{% endblock %}
+{% block main %}
+<div class="page-banner"><div class="container"><h1>Facilities</h1></div></div>
+<div class="container"><div class="row g-3">
+  {# Edit this list directly: change the icon name, title and text. #}
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-volume-mute fs-2 text-primary"></i><h2 class="h5 mt-2">Silent study hall</h2><p class="mb-0">One calm floor with strict silence rules.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-lightbulb fs-2 text-primary"></i><h2 class="h5 mt-2">Good lighting</h2><p class="mb-0">Bright, glare-free light at every desk.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-wind fs-2 text-primary"></i><h2 class="h5 mt-2">Fans / air cooling</h2><p class="mb-0">Comfortable air flow through the day.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-plug fs-2 text-primary"></i><h2 class="h5 mt-2">Charging points</h2><p class="mb-0">Keep your laptop and phone charged.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-droplet fs-2 text-primary"></i><h2 class="h5 mt-2">Drinking water</h2><p class="mb-0">Clean drinking water on the floor.</p></div></div></div>
+  <div class="col-md-4"><div class="card h-100"><div class="card-body"><i class="bi bi-camera-video fs-2 text-primary"></i><h2 class="h5 mt-2">CCTV security</h2><p class="mb-0">Safe for your belongings and for you.</p></div></div></div>
+</div></div>
+{% endblock %}

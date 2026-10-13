@@ -1,0 +1,77 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Dashboard - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Welcome, {{ user.first_name|default:user.username }}</h1>
+  <span class="text-muted small">Student ID: <strong>{{ student.student_id }}</strong></span></div>
+
+{% if not student.is_approved %}
+  <div class="alert alert-{% if student.approval_status == 'rejected' %}danger{% else %}warning{% endif %}" role="status">
+    {% if student.approval_status == 'rejected' %}Your registration was not approved. Please contact the library.
+    {% else %}Your registration is waiting for approval. Booking and membership features unlock once it is approved.{% endif %}
+  </div>
+{% endif %}
+
+<div class="row g-3 mb-3">
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body">
+    <div class="stat-label">Membership</div>
+    {% if membership %}<div class="stat-value">{% status_badge 'active' 'Active' %}</div>
+      <div class="small text-muted mt-1">Until {{ membership.end_date|date:"d M Y" }} ({{ membership.days_left }} days left)</div>
+    {% else %}<div class="stat-value">{% status_badge 'expired' 'No active plan' %}</div>
+      <a class="small" href="{% url 'renew_membership' %}">Choose a plan</a>{% endif %}
+  </div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body">
+    <div class="stat-label">Seat</div>
+    {% if booking %}<div class="stat-value">{{ booking.seat.number }}</div>
+      <div class="small mt-1">{% status_badge booking.status booking.get_status_display %}</div>
+    {% else %}<div class="stat-value">None</div><a class="small" href="{% url 'available_seats' %}">View available seats</a>{% endif %}
+  </div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body">
+    <div class="stat-label">Pending dues</div>
+    <div class="stat-value">{{ summary.remaining_due|money }}</div>
+    <a class="small" href="{% url 'fee_summary' %}">View fees</a>
+  </div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body">
+    <div class="stat-label">Total paid</div>
+    <div class="stat-value">{{ summary.total_paid|money }}</div>
+    {% if summary.pending_verification %}<div class="small text-muted">{{ summary.pending_verification|money }} awaiting verification</div>{% endif %}
+  </div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6"><div class="card h-100">
+    <div class="card-header d-flex justify-content-between">Recent payments <a class="small" href="{% url 'payment_history' %}">All</a></div>
+    <ul class="list-group list-group-flush">
+      {% for payment in recent_payments %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ payment.amount|money }} <small class="text-muted">{{ payment.paid_on|date:"d M Y" }}</small></span>
+          {% status_badge payment.status payment.get_status_display %}
+        </li>
+      {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No payments yet." %}</li>{% endfor %}
+    </ul>
+  </div></div>
+  <div class="col-lg-6"><div class="card h-100">
+    <div class="card-header d-flex justify-content-between">Notifications <a class="small" href="{% url 'notification_list' %}">All</a></div>
+    <ul class="list-group list-group-flush">
+      {% for note in notifications %}
+        <li class="list-group-item {% if not note.is_read %}fw-semibold{% endif %}">{{ note.title }}
+          <div class="small text-muted fw-normal">{{ note.created_at|date:"d M, h:i A" }}</div></li>
+      {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No notifications." %}</li>{% endfor %}
+    </ul>
+  </div></div>
+  <div class="col-lg-6"><div class="card h-100">
+    <div class="card-header d-flex justify-content-between">Complaints <a class="small" href="{% url 'complaint_list' %}">All</a></div>
+    <ul class="list-group list-group-flush">
+      {% for complaint in complaints %}
+        <li class="list-group-item d-flex justify-content-between"><a href="{% url 'complaint_detail' complaint.pk %}">{{ complaint.subject }}</a>
+          {% status_badge complaint.status complaint.get_status_display %}</li>
+      {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No complaints submitted." %}</li>{% endfor %}
+    </ul>
+  </div></div>
+  <div class="col-lg-6"><div class="card h-100"><div class="card-body d-flex flex-column justify-content-center text-center">
+    <i class="bi bi-qr-code fs-1 text-primary"></i>
+    <p class="mb-2">Your QR ID card</p>
+    <a class="btn btn-outline-primary btn-sm mx-auto" href="{% url 'my_id_card' %}">Open ID card</a>
+  </div></div></div>
+</div>
+{% endblock %}

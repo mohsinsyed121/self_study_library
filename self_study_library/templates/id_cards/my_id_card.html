@@ -1,0 +1,19 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}My ID card - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head no-print"><h1>My ID card</h1><button type="button" class="btn btn-primary btn-sm" data-print><i class="bi bi-printer"></i> Print</button></div>
+<div class="id-card">
+  <div class="id-card-head">{% if site.logo %}<img src="{{ site.logo.url }}" alt="">{% endif %}<strong>{{ site.library_name }}</strong></div>
+  <div class="id-card-body">
+    {% if student.photo %}<img src="{{ student.photo.url }}" alt="" class="id-photo mb-2">{% endif %}
+    <div class="h5 mb-0">{{ student.full_name }}</div>
+    <div class="text-muted mb-2">ID: <strong>{{ student.student_id }}</strong></div>
+    <img src="{{ qr_image }}" alt="QR code for {{ student.student_id }}" class="id-qr">
+    <div class="mt-2">Membership:
+      {% if membership %}{% status_badge 'active' 'Active' %} <span class="small">till {{ membership.end_date|date:"d M Y" }}</span>
+      {% else %}{% status_badge 'expired' 'Not active' %}{% endif %}</div>
+  </div>
+</div>
+<p class="small text-muted text-center mt-3 no-print">The QR code holds only a private verification link. It does not contain your phone, payments or other details.</p>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'layouts/app_base.html' %}
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'css/student.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}" rel="stylesheet">
+{% endblock %}
+{% block body_class %}admin-panel{% endblock %}
+{% block sidebar %}{% include 'partials/admin_sidebar.html' %}{% endblock %}

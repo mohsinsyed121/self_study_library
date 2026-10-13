@@ -1,0 +1,19 @@
+{# Top bar for student and admin panels (sidebar toggle shows on small screens) #}
+<nav class="navbar site-nav navbar-dark" aria-label="Top bar">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-light btn-sm d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#appSidebar" aria-controls="appSidebar" aria-label="Open menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <a class="navbar-brand d-flex align-items-center mb-0" href="{% url 'after_login' %}">
+        {% if site.logo %}<img src="{{ site.logo.url }}" alt="" class="brand-logo">{% endif %}
+        {{ site.library_name }}
+      </a>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="text-light small d-none d-sm-inline">{{ user.get_full_name|default:user.username }}</span>
+      <a class="btn btn-outline-light btn-sm" href="{% url 'home' %}">Website</a>
+      <a class="btn btn-light btn-sm" href="{% url 'logout' %}">Log out</a>
+    </div>
+  </div>
+</nav>

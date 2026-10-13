@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Log in - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="card auth-card">
+  <div class="card-body p-4">
+    <h1 class="h4 mb-3">Log in</h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include 'partials/form_fields.html' %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn btn-primary w-100">Log in</button>
+    </form>
+    <p class="small text-center mt-3 mb-0">New student? <a href="{% url 'register' %}">Create an account</a></p>
+  </div>
+</div>
+{% endblock %}

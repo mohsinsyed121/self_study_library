@@ -1,0 +1,13 @@
+{% extends 'layouts/student_base.html' %}
+{% block title %}Renew membership - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Renew or choose a plan</h1></div>
+<div class="card form-card"><div class="card-body">
+  {% if current %}<p class="small text-muted">Your current plan ends on {{ current.end_date|date:"d M Y" }}. A renewal starts the next day, so you lose no days.</p>{% endif %}
+  <form method="post" novalidate>{% csrf_token %}
+    {% include 'partials/form_fields.html' %}
+    <button class="btn btn-primary" type="submit">Send request</button>
+    <a href="{% url 'plans' %}" class="btn btn-outline-secondary">View plan details</a>
+  </form>
+</div></div>
+{% endblock %}

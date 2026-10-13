@@ -1,0 +1,7 @@
+/* Form layout helpers. Field styling itself comes from Bootstrap (see the `bs` template filter). */
+.form-field .form-label { font-weight: 600; font-size: .92rem; color: var(--ink); }
+.form-field .form-text { font-size: .82rem; }
+.form-field .invalid-feedback { font-size: .85rem; }
+.form-card { max-width: 640px; }
+.form-card.wide { max-width: 860px; }
+textarea.form-control { min-height: 5rem; }

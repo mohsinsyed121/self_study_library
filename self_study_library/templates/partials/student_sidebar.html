@@ -1,0 +1,12 @@
+{% with current=request.resolver_match.url_name %}
+<a class="nav-link {% if current == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+<a class="nav-link {% if current == 'student_profile' or current == 'student_profile_edit' %}active{% endif %}" href="{% url 'student_profile' %}"><i class="bi bi-person"></i> My profile</a>
+<a class="nav-link {% if current == 'available_seats' or current == 'seat_detail' or current == 'book_seat' %}active{% endif %}" href="{% url 'available_seats' %}"><i class="bi bi-grid-3x3-gap"></i> Seats</a>
+<a class="nav-link {% if current == 'my_booking' or current == 'booking_confirmation' %}active{% endif %}" href="{% url 'my_booking' %}"><i class="bi bi-bookmark-check"></i> My booking</a>
+<a class="nav-link {% if current == 'my_membership' or current == 'renew_membership' or current == 'plans' %}active{% endif %}" href="{% url 'my_membership' %}"><i class="bi bi-card-checklist"></i> Membership</a>
+<a class="nav-link {% if current == 'fee_summary' or current == 'payment_history' or current == 'payment_detail' or current == 'report_payment' %}active{% endif %}" href="{% url 'fee_summary' %}"><i class="bi bi-wallet2"></i> Fees &amp; payments</a>
+<a class="nav-link {% if current == 'my_id_card' %}active{% endif %}" href="{% url 'my_id_card' %}"><i class="bi bi-qr-code"></i> My ID card</a>
+<a class="nav-link {% if current == 'complaint_list' or current == 'complaint_create' or current == 'complaint_detail' %}active{% endif %}" href="{% url 'complaint_list' %}"><i class="bi bi-chat-left-text"></i> Complaints</a>
+<a class="nav-link {% if current == 'notification_list' %}active{% endif %}" href="{% url 'notification_list' %}"><i class="bi bi-bell"></i> Notifications
+  {% if unread_count %}<span class="badge text-bg-danger ms-auto">{{ unread_count }}</span>{% endif %}</a>
+{% endwith %}

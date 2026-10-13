@@ -1,0 +1,15 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Seat {{ seat.number }} - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Seat {{ seat.number }}</h1><a href="{% url 'available_seats' %}" class="btn btn-outline-secondary btn-sm">Back to map</a></div>
+<div class="card form-card"><div class="card-body">
+  <dl class="row mb-3">
+    <dt class="col-5">Section</dt><dd class="col-7">{{ seat.section|default:"Main hall" }}</dd>
+    <dt class="col-5">Status</dt><dd class="col-7">{% status_badge seat.status seat.status_label %}</dd>
+  </dl>
+  {% if seat.status == 'available' %}
+    <a href="{% url 'book_seat' seat.pk %}" class="btn btn-primary">Book this seat</a>
+  {% else %}<p class="text-muted mb-0">This seat is not available right now. Please pick another seat.</p>{% endif %}
+</div></div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Fees - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Fees and dues</h1><a href="{% url 'payment_history' %}" class="btn btn-outline-primary btn-sm">Payment history</a></div>
+<div class="row g-3 mb-3">
+  <div class="col-sm-4"><div class="card stat-card"><div class="card-body"><div class="stat-label">Total fees</div><div class="stat-value">{{ summary.total_fee|money }}</div></div></div></div>
+  <div class="col-sm-4"><div class="card stat-card"><div class="card-body"><div class="stat-label">Confirmed payments</div><div class="stat-value">{{ summary.total_paid|money }}</div></div></div></div>
+  <div class="col-sm-4"><div class="card stat-card"><div class="card-body"><div class="stat-label">Remaining due</div><div class="stat-value">{{ summary.remaining_due|money }}</div></div></div></div>
+</div>
+<p class="small text-muted">Remaining due = total fees minus confirmed payments. Payments awaiting verification ({{ summary.pending_verification|money }}) are not counted yet.</p>
+<div class="card"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Fee</th><th>Amount</th><th>Paid</th><th>Due</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for fee in fees %}<tr><td>{{ fee.description }}<div class="small text-muted">Due {{ fee.due_date|date:"d M Y" }}</div></td>
+    <td>{{ fee.amount|money }}</td><td>{{ fee.total_paid|money }}</td><td>{{ fee.remaining_due|money }}</td>
+    <td>{% status_badge fee.payment_status %}</td>
+    <td>{% if fee.payable_now > 0 %}<a class="btn btn-sm btn-outline-primary" href="{% url 'report_payment' fee.pk %}">Report payment</a>{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="6">{% include 'partials/empty_state.html' with text="No fees yet. A fee is created when your membership is activated." %}</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'layouts/student_base.html' %}
+{% load ui %}
+{% block title %}Booking received - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="card form-card text-center"><div class="card-body p-4">
+  <i class="bi bi-check-circle-fill text-success display-4"></i>
+  <h1 class="h4 mt-2">Seat {{ booking.seat.number }} is {{ booking.get_status_display|lower }} for you</h1>
+  <p class="text-muted">Status: {% status_badge booking.status booking.get_status_display %}. We will notify you when the library confirms it.</p>
+  <a href="{% url 'my_booking' %}" class="btn btn-primary">View my booking</a>
+</div></div>
+{% endblock %}

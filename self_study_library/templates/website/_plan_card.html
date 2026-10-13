@@ -1,0 +1,9 @@
+{% load ui %}
+<div class="col-md-4">
+  <div class="card plan-card h-100"><div class="card-body">
+    <h3 class="h5">{{ plan.name }}</h3>
+    <div class="price">{{ plan.price|money }}</div>
+    <p class="text-muted small">{{ plan.duration_days }} days</p>
+    <p class="mb-0">{{ plan.description }}</p>
+  </div></div>
+</div>

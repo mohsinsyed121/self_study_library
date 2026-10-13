@@ -1,0 +1,29 @@
+{% extends 'layouts/admin_base.html' %}
+{% load ui %}
+{% block title %}Admin dashboard{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Dashboard</h1></div>
+<div class="row g-3 mb-3">
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Total students</div><div class="stat-value">{{ stats.total_students }}</div>
+    {% if stats.pending_approvals %}<a class="small" href="{% url 'admin_students' %}?status=pending">{{ stats.pending_approvals }} awaiting approval</a>{% endif %}</div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Active memberships</div><div class="stat-value">{{ stats.active_memberships }}</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Available seats</div><div class="stat-value">{{ stats.seats.available }} <small class="text-muted fs-6">of {{ stats.seats.total }}</small></div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Occupied / reserved</div><div class="stat-value">{{ stats.seats.occupied }} / {{ stats.seats.reserved }}</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Pending fees (dues)</div><div class="stat-value">{{ stats.pending_fees|money }}</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Confirmed collection</div><div class="stat-value">{{ stats.confirmed_collection|money }}</div><div class="small text-muted">This month {{ stats.month_collection|money }}</div></div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Payments to verify</div><div class="stat-value">{{ stats.payments_to_verify }}</div>
+    {% if stats.payments_to_verify %}<a class="small" href="{% url 'admin_payments' %}?status=pending">Review</a>{% endif %}</div></div></div>
+  <div class="col-sm-6 col-xl-3"><div class="card stat-card h-100"><div class="card-body"><div class="stat-label">Pending complaints</div><div class="stat-value">{{ stats.pending_complaints }}</div></div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-4"><div class="card h-100"><div class="card-header">Recent registrations</div><ul class="list-group list-group-flush">
+    {% for s in stats.recent_students %}<li class="list-group-item d-flex justify-content-between"><a href="{% url 'admin_student_detail' s.pk %}">{{ s.full_name }}</a>{% status_badge s.approval_status s.get_approval_status_display %}</li>
+    {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No students yet." %}</li>{% endfor %}</ul></div></div>
+  <div class="col-lg-4"><div class="card h-100"><div class="card-header">Recent payments</div><ul class="list-group list-group-flush">
+    {% for p in stats.recent_payments %}<li class="list-group-item d-flex justify-content-between"><span>{{ p.fee.student.full_name }} · {{ p.amount|money }}</span>{% status_badge p.status p.get_status_display %}</li>
+    {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="No payments yet." %}</li>{% endfor %}</ul></div></div>
+  <div class="col-lg-4"><div class="card h-100"><div class="card-header">Pending complaints</div><ul class="list-group list-group-flush">
+    {% for c in stats.recent_complaints %}<li class="list-group-item"><a href="{% url 'admin_complaint_detail' c.pk %}">{{ c.subject }}</a><div class="small text-muted">{{ c.student.full_name }}</div></li>
+    {% empty %}<li class="list-group-item">{% include 'partials/empty_state.html' with text="Nothing pending." %}</li>{% endfor %}</ul></div></div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{# Renders every field of a form with labels, help text and errors next to each field. #}
+{% load ui %}
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+{% endif %}
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+{% for field in form.visible_fields %}
+  <div class="mb-3 form-field">
+    {% if field.field.widget.input_type == 'checkbox' %}
+      <div class="form-check">
+        {{ field|bs }}
+        <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      </div>
+    {% else %}
+      <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="text-danger" aria-hidden="true"> *</span>{% endif %}</label>
+      {{ field|bs }}
+    {% endif %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+  </div>
+{% endfor %}

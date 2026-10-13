@@ -1,0 +1,27 @@
+{% extends 'layouts/student_base.html' %}
+{% load static %}
+{% block title %}Seats - {{ site.library_name }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Seat map</h1>
+  <span class="text-muted small">{{ counts.available }} of {{ counts.total }} seats available</span></div>
+<div class="card mb-3"><div class="card-body d-flex flex-wrap gap-3 align-items-center">
+  <span><span class="legend-dot seat-available"></span>Available</span>
+  <span><span class="legend-dot seat-reserved"></span>Reserved</span>
+  <span><span class="legend-dot seat-occupied"></span>Occupied</span>
+  <span class="ms-auto btn-group btn-group-sm" role="group" aria-label="Filter seats">
+    <button type="button" class="btn btn-outline-primary active" data-seat-filter="all">All</button>
+    <button type="button" class="btn btn-outline-primary" data-seat-filter="available">Available only</button>
+  </span>
+</div></div>
+{% for section, seats in sections.items %}
+  <div class="card mb-3"><div class="card-header">{{ section }}</div><div class="card-body">
+    <div class="seat-grid">
+      {% for seat in seats %}
+        <div><a href="{% url 'seat_detail' seat.pk %}" class="seat seat-{{ seat.status }}" data-seat-status="{{ seat.status }}"
+           aria-label="Seat {{ seat.number }}, {{ seat.status_label }}">{{ seat.number }}<small>{{ seat.status_label }}</small></a></div>
+      {% endfor %}
+    </div>
+  </div></div>
+{% empty %}{% include 'partials/empty_state.html' with text="No seats have been added yet." %}{% endfor %}
+{% endblock %}
+{% block extra_js %}<script src="{% static 'js/seats.js' %}"></script>{% endblock %}
