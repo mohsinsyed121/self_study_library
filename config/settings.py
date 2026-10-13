@@ -27,10 +27,17 @@ def env_list(name, default=""):
     return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
 
 
-ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
+ALLOWED_HOSTS = [
+    "self-study-library.vercel.app",
+    ".vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
 if os.getenv("RENDER_EXTERNAL_HOSTNAME"):  # Render sets this automatically
     ALLOWED_HOSTS.append(os.environ["RENDER_EXTERNAL_HOSTNAME"])
-CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = [
+    "https://self-study-library.vercel.app",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
